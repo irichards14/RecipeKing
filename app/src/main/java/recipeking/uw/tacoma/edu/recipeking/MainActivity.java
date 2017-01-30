@@ -1,8 +1,10 @@
 package recipeking.uw.tacoma.edu.recipeking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -72,6 +74,34 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void launch(View v) {
+        DialogFragment fragment = null;
+        if (v.getId() == R.id.categories) {
+            showCategoriesActivity(v);
+        } else if (v.getId() == R.id.favorite) {
+            showFavoritesActivity(v);
+        } else if (v.getId() == R.id.my_recipies) {
+            showMyRecipiesActivity(v);
+        }
+        if (fragment != null)
+            fragment.show(getSupportFragmentManager(), "launch");
+    }
+
+    public void showCategoriesActivity(View view) {
+        Intent intent = new Intent(this, CategoriesActivity.class);
+        startActivity(intent);
+    }
+
+    public void showFavoritesActivity(View view) {
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+    }
+
+    public void showMyRecipiesActivity(View view) {
+        Intent intent = new Intent(this, MyRecipesActivity.class);
+        startActivity(intent);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
