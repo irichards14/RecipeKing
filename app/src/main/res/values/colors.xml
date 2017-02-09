@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Android default colors-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name='logoColor'>#ffffff</color>
-</resources>
 
-    <!--ffab58-->
+    <!--Custom colors-->
+    <color name='logoColor'>#ffffff</color>
+    <color name='myColorPrimary'>#FF5733</color>
+    <color name='myColorPrimaryDark'>#900C3f</color>
+    <color name='myAccentColor'>#581845</color>
+
+
+</resources>

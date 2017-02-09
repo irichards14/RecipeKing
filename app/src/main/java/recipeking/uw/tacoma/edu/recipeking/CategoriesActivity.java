@@ -1,5 +1,6 @@
 package recipeking.uw.tacoma.edu.recipeking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,5 +27,10 @@ public class CategoriesActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void showActivity(View view) {
+        Intent intent = new Intent(this, MyRecipesActivity.class);
+        startActivity(intent);
     }
 }
