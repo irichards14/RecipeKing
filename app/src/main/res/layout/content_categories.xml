@@ -17,8 +17,9 @@
 
 
         <ImageView
-            android:id="@+id/deserts_category_iv"
-            android:src="@drawable/desert1"
+            android:id="@+id/desserts_category_iv"
+            android:contentDescription="@string/desserts_image_view_desc"
+            android:src="@drawable/dessert1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
@@ -27,6 +28,7 @@
 
         <ImageView
             android:id="@+id/lunch_category_iv"
+            android:contentDescription="@string/lunch_image_view_desc"
             android:src="@drawable/lunch1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,6 +38,7 @@
 
         <ImageView
             android:id="@+id/italian_category_iv"
+            android:contentDescription="@string/italian_image_view_desc"
             android:src="@drawable/italian1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,6 +49,7 @@
 
         <ImageView
             android:id="@+id/chinese_category_iv"
+            android:contentDescription="@string/chinese_image_view_desc"
             android:src="@drawable/chinese1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,6 +60,7 @@
 
         <ImageView
             android:id="@+id/breakfast_category_iv"
+            android:contentDescription="@string/breakfast_image_view_desc"
             android:src="@drawable/breakfast1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -66,6 +71,7 @@
 
         <ImageView
             android:id="@+id/salads_category_iv"
+            android:contentDescription="@string/salads_image_view_desc"
             android:src="@drawable/salads1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

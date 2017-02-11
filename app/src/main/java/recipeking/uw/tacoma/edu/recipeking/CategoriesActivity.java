@@ -10,6 +10,8 @@ import android.view.View;
 
 public class CategoriesActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE = "recipeking.uw.tacoma.edu.recipeking.MESSAGE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,9 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     public void showActivity(View view) {
-        Intent intent = new Intent(this, MyRecipesActivity.class);
+        Intent intent = new Intent(this, RecipesListActivity.class);
+        String message = (String) view.getContentDescription();
+        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 }

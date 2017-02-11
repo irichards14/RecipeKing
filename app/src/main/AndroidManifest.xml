@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="recipeking.uw.tacoma.edu.recipeking">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_icon"
@@ -32,6 +34,9 @@
             android:label="@string/title_activity_my_recipes"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".RecipesListActivity" />
+
     </application>
 
 </manifest>
