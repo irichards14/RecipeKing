@@ -16,7 +16,7 @@ public class Recipe implements Serializable {
     private String mTitle;
     private String mImageUrl;
     private String[] mIngredients;
-    private String mDirectionsUrl;
+    private String mInstructionsUrl;
 
     public static final String HITS = "hits";
     public static final String RECIPE = "recipe";
@@ -25,11 +25,17 @@ public class Recipe implements Serializable {
     public static final String INGREDIENT_LINES = "ingredientLines";
     public static final String URL = "url";
 
-    public Recipe(String mTitle, String mImageUrl, String[] mIngredients, String mDirectionsUrl) {
+    public static final String TITLE = "title";
+    public static final String USER = "user";
+    public static final String IMAGE_URL = "image_url";
+    public static final String INGREDIENTS = "ingredients";
+    public static final String INSTRUCTIONS_URL = "instructions_url";
+
+    public Recipe(String mTitle, String mImageUrl, String[] mIngredients, String mInstructionsUrl) {
         this.mTitle = mTitle;
         this.mImageUrl = mImageUrl;
         this.mIngredients = mIngredients;
-        this.mDirectionsUrl = mDirectionsUrl;
+        this.mInstructionsUrl = mInstructionsUrl;
     }
 
     public String getmTitle() {
@@ -44,8 +50,8 @@ public class Recipe implements Serializable {
         return mIngredients;
     }
 
-    public String getmDirectionsUrl() {
-        return mDirectionsUrl;
+    public String getmInstructionsUrl() {
+        return mInstructionsUrl;
     }
 
     public void setmTitle(String mTitle) {
@@ -56,8 +62,8 @@ public class Recipe implements Serializable {
         this.mImageUrl = mImageUrl;
     }
 
-    public void setmDirectionsUrl(String mDirectionsUrl) {
-        this.mDirectionsUrl = mDirectionsUrl;
+    public void setmInstructionsUrl(String mInstructionsUrl) {
+        this.mInstructionsUrl = mInstructionsUrl;
     }
 
     public void setmIngredients(String[] mIngredients) {
@@ -104,6 +110,54 @@ public class Recipe implements Serializable {
             }
         }
         return reason;
+    }
+
+    public static String parseFavRecipesJSON(String recipesJSON, List<Recipe> recipeList) {
+        String reason = null;
+        if(recipesJSON != null) {
+
+            try {
+                JSONArray arr = new JSONArray(recipesJSON);
+
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = arr.getJSONObject(i);
+
+                    String title = obj.getString(Recipe.TITLE);
+                    //String user = obj.getString(Recipe.USER);
+                    String img_url = obj.getString(Recipe.IMAGE_URL);
+                    String ingredients = obj.getString(Recipe.INGREDIENTS);
+
+                    String[] ingred = ingredients.split("\\n");
+
+                    String instructions_url = obj.getString(Recipe.INSTRUCTIONS_URL);
+
+                    Recipe recipe = new Recipe(title, img_url, ingred, instructions_url);
+                    recipeList.add(recipe);
+
+                }
+            } catch (JSONException e) {
+                reason = "Unable to parse data, Reason: " + e.getMessage();
+            }
+
+        }
+        return reason;
+    }
+
+    /**
+     * Compares two Recipe objects for equality.
+     * @param theOther represents the other Recipe object.
+     * @return the result of the comparison.
+     */
+    @Override
+    public boolean equals(Object theOther) {
+        boolean result = false;
+        if(theOther instanceof Recipe) {
+            Recipe other = (Recipe) theOther;
+            if (this.mTitle.equals(other.mTitle)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
 }

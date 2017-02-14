@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import recipeking.uw.tacoma.edu.recipeking.MainActivity;
 import recipeking.uw.tacoma.edu.recipeking.R;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 
@@ -38,7 +39,20 @@ public class RecipeFragment extends Fragment {
             = "045854ce8fa13ee1b1b2c482677ec902", FROM = "from", FROM_VALUE = "0", TO = "to",
             TO_VALUE = "20";
 
+//    private static final String BASE_FAV_URL
+//            = "http://cssgate.insttech.washington.edu/~_450bteam7/favorites_list.php?";
+//
+//    private static final String ADD_FAV_URL
+//            = "http://cssgate.insttech.washington.edu/~_450bteam7/addFavorite.php?";
+//
+//    private static final String REMOVE_FAV_URL
+//            = "http://cssgate.insttech.washington.edu/~_450bteam7/removeFavorite.php?";
+
+
     private static String mResultAPIUrl;
+
+    private static boolean favoriteMode;
+
 
     private static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -54,13 +68,14 @@ public class RecipeFragment extends Fragment {
     public RecipeFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static RecipeFragment newInstance(String contentSearch) {
+
+    public static RecipeFragment newInstance(String contentSearch, boolean mode) {
         RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
         //args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
+
+        favoriteMode = mode;
 
         mResultAPIUrl = buildUrl(contentSearch).toString();
 
@@ -93,10 +108,10 @@ public class RecipeFragment extends Fragment {
 //            recyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(Recipe.ITEMS, mListener));
             DownloadRecipesTask task = new DownloadRecipesTask();
             task.execute(new String[] {mResultAPIUrl});
+
         }
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -126,7 +141,6 @@ public class RecipeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Recipe item);
     }
 
@@ -155,6 +169,25 @@ public class RecipeFragment extends Fragment {
 
         return url;
     }
+
+//    private String buildFavUlr() {
+//        StringBuilder sb = new StringBuilder(BASE_FAV_URL);
+//
+//        try {
+//            String user = MainActivity.currentUser;
+//            sb.append("usr=");
+//            sb.append(URLEncoder.encode(user, "UTF-8"));
+//
+//            Log.i("Recipe(FavList)Fragment", sb.toString());
+//
+//        } catch (Exception e) {
+//            Toast.makeText(getActivity().getApplicationContext(),
+//                    "Something wrong with the favlist url" + e.getMessage(),
+//                    Toast.LENGTH_LONG).show();
+//        }
+//
+//        return sb.toString();
+//    }
 
 
     private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
@@ -194,8 +227,8 @@ public class RecipeFragment extends Fragment {
                 return;
             }
 
-            List<Recipe> courseList = new ArrayList<Recipe>();
-            result = Recipe.parseRecipesJSON(result, courseList);
+            List<Recipe> recipeList = new ArrayList<Recipe>();
+            result = Recipe.parseRecipesJSON(result, recipeList);
 
             if(result != null) {
                 Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
@@ -203,9 +236,15 @@ public class RecipeFragment extends Fragment {
                 return;
             }
 
-            if (!courseList.isEmpty()) {
-                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(courseList, mListener));
+            if (favoriteMode) {
+                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(MainActivity.favoriteList,
+                        mListener));
+            } else {
+                if (!recipeList.isEmpty()) {
+                    mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(recipeList, mListener));
+                }
             }
+
         }
 
     }
