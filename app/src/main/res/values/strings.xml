@@ -46,5 +46,7 @@
     <string name="chooser_title">Open with</string>
 
     <string name="greeting_message">Hello</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
 
 </resources>

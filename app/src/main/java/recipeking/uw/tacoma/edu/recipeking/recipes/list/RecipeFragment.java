@@ -211,6 +211,11 @@ public class RecipeFragment extends Fragment {
      */
     private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground() method for this task. Downloads the recipes from the external API.
+         * @param urls - GET Url for the external API.
+         * @return - the resulting JSON data.
+         */
         @Override
         protected String doInBackground(String... urls) {
             StringBuilder result = new StringBuilder();
@@ -238,6 +243,11 @@ public class RecipeFragment extends Fragment {
             return result.toString();
         }
 
+        /**
+         * onPostExecute() method for this task. Fills a list of recipe objects based on the
+         * retrieved JSON data.
+         * @param result - the retrieved JSON data.
+         */
         @Override
         protected void onPostExecute(String result) {
             if (result.startsWith("Unable to")) {

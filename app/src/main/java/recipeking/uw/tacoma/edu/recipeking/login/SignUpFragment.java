@@ -204,6 +204,11 @@ public class SignUpFragment extends Fragment {
      */
     private class AddUserTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground() method for this task. Adds a new user to CSS Gate server.
+         * @param urls - the AddUser URL
+         * @return - the resulting string 'success' or 'fail'.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -232,7 +237,11 @@ public class SignUpFragment extends Fragment {
             return response;
         }
 
-
+        /**
+         * onPostExecute method for this task. If the sign up is successful, toast a message
+         * and return to login activity. If not, displays appropriate message.
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
             // Something wrong with the network or the URL.
@@ -241,13 +250,11 @@ public class SignUpFragment extends Fragment {
                 String r = obj.getString("result");
 
                 if (r.equals("success")) {
-                    //Open MAIN ACTIVITY and pass the USER to it
                     Toast.makeText(getActivity().getApplicationContext(), "You have been " +
                             "registered " +
                             "successfully", Toast.LENGTH_LONG).show();
 
                     getActivity().getSupportFragmentManager().popBackStackImmediate();
-
                 } else {
                     String errorMsg = obj.getString("error");
                     Toast.makeText(getActivity().getApplicationContext(), errorMsg, Toast

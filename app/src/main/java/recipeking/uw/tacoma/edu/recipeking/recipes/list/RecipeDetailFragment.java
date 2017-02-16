@@ -153,9 +153,8 @@ public class RecipeDetailFragment extends Fragment {
 
             // If the recipe is already in the favorite list, set the text accordingly.
             if (MainActivity.favoriteList.contains(recipe)) {
-                mFavoriteButton.setText("Remove from Favorites");
+                mFavoriteButton.setText(R.string.remove_from_favorites);
             }
-
 
             mFavoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,11 +163,11 @@ public class RecipeDetailFragment extends Fragment {
                     if(mFavoriteButton.getText().toString().equals("Remove from Favorites")) {
                         // Removes the recipe from the static list.
                         MainActivity.removeFromFavorites(recipe, getContext());
-                        mFavoriteButton.setText("Add to Favorites");
+                        mFavoriteButton.setText(R.string.add_to_favorites);
                     } else {
                         // Adds the recipe to the static list.
                         MainActivity.addToFavorites(recipe, getContext());
-                        mFavoriteButton.setText("Remove from Favorites");
+                        mFavoriteButton.setText(R.string.remove_from_favorites);
                     }
 
                 }

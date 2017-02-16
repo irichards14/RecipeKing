@@ -260,6 +260,12 @@ public class LoginFragment extends Fragment {
      */
     public class UserLoginTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground method for this task. Tries to submit GET request to CSS Gate
+         * to log in the current user.
+         * @param urls - The login URL.
+         * @return - 'success' or 'fail'.
+         */
         @Override
         protected String doInBackground(String... urls) {
             try {
@@ -295,6 +301,11 @@ public class LoginFragment extends Fragment {
             return response;
         }
 
+        /**
+         * onPostExecute method for this task. If login was successful it opens MainActivity
+         * and passes the user to it.
+         * @param result
+         */
         @Override
         protected void onPostExecute(final String result) {
             mAuthTask = null;

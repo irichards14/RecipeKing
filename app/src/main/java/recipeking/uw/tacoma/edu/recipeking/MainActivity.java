@@ -407,6 +407,12 @@ public class MainActivity extends AppCompatActivity
      */
     private class DownloadFavoritesTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground() method for this task. Makes an URL connection to CSS Gate and gets
+         * the resulting JSON data.
+         * @param urls - the CSS Gate url(s).
+         * @return - the resulting JSON data as a string.
+         */
         @Override
         protected String doInBackground(String... urls) {
             StringBuilder result = new StringBuilder();
@@ -434,6 +440,11 @@ public class MainActivity extends AppCompatActivity
             return result.toString();
         }
 
+        /**
+         * onPostExecute() method for this task. Receive the JSON data and builds a recipe objects
+         * and adds them to the favoriteList.
+         * @param result - the resulting JSON data string.
+         */
         @Override
         protected void onPostExecute(String result) {
             // List is empty
@@ -463,6 +474,12 @@ public class MainActivity extends AppCompatActivity
      */
     private static class AddToFavoritesList extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground() method for this task. Makes an URL connection to CSS Gate and adds
+         * a recipe object to the favorite table on the server.
+         * @param urls - the CSS Gate url(s).
+         * @return - the resulting JSON data 'success' or 'fail'.
+         */
         @Override
         protected String doInBackground(String... urls) {
             StringBuilder result = new StringBuilder();
@@ -491,7 +508,10 @@ public class MainActivity extends AppCompatActivity
             return result.toString();
         }
 
-
+        /**
+         * onPostExecute() method for this task.
+         * @param result - the resulting JSON data string.
+         */
         @Override
         protected void onPostExecute(String result) {
            super.onPostExecute(result);
