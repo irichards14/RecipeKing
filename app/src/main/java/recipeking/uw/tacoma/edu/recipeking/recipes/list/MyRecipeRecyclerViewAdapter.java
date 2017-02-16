@@ -21,19 +21,34 @@ import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Recipe} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder> {
 
+    /** The list of recipes for the RecyclerView */
     private final List<Recipe> mValues;
+
+    /** Listener for interacting with the list of recipes. */
     private final OnListFragmentInteractionListener mListener;
 
+    /**
+     * Constructor for this class.
+     *
+     * @param items - the recipe items.
+     * @param listener - the interaction listener.
+     */
     public MyRecipeRecyclerViewAdapter(List<Recipe> items, OnListFragmentInteractionListener
             listener) {
         mValues = items;
         mListener = listener;
     }
 
+    /**
+     * onCreateViewHolder() method for this RecyclerViewer.
+     *
+     * @param parent - The ViewGroup parent object.
+     * @param viewType - the viewType integer.
+     * @return - a VIewHolder object.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -41,6 +56,12 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
         return new ViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder() method for this RecyclerViewer.
+     *
+     * @param holder - ViewHolder object.
+     * @param position - the position of the item been clicked.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
@@ -61,11 +82,16 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
         });
     }
 
+    /** Returns the number of items. */
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
+
+    /**
+     * Inner class representing the item of the list.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
@@ -85,6 +111,9 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
         }
     }
 
+    /**
+     * AsyncTask for downloading the images for the recipes, which will be displayed in the list.
+     */
     public static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 

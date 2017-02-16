@@ -34,22 +34,30 @@ import recipeking.uw.tacoma.edu.recipeking.MainActivity;
 import recipeking.uw.tacoma.edu.recipeking.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A login Fragment class. This fragment class represents login.
+ *
  */
 public class LoginFragment extends Fragment {
 
+    /** String constant for the login URL */
     private static final String
             BASE_LOGIN_URL = "http://cssgate.insttech.washington.edu/~_450bteam7/login.php?",
             PARAM_USERNAME = "username", PARAM_PASSWORD = "password";
 
-    private static String mResultLoginUrl;
 
+    /** A EditText for the username field. */
     private AutoCompleteTextView mUsernameView;
+
+    /** A EditText for the password field. */
     private EditText mPasswordView;
+
+    /** A progress bar for logging in. */
     private View mProgressView;
+
+    /** Field for storing the login view. */
     private View mLoginFormView;
+
+    /** TextView for the sign up option. */
     private TextView mSignUpTextView;
 
 
@@ -58,7 +66,6 @@ public class LoginFragment extends Fragment {
      */
     private UserLoginTask mAuthTask = null;
 
-    //private OnFragmentInteractionListener mListener;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -77,13 +84,24 @@ public class LoginFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCreate() method for this Fragment.
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_login);
 
     }
 
+    /**
+     * onCreateView() method for this fragment. Binds the layout views with the class
+     * fields, and sets up listener actions for button clicks.
+     * @param inflater - the inflater of this Fragment.
+     * @param container - the container of this Fragment.
+     * @param savedInstanceState - the savedInstanceState of this Fragment.
+     * @return - a View object.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,8 +112,8 @@ public class LoginFragment extends Fragment {
 
         mPasswordView = (EditText) view.findViewById(R.id.password);
 
-        Button mEmailSignInButton = (Button) view.findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+        Button mLogInButton = (Button) view.findViewById(R.id.log_in_button);
+        mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -148,8 +166,8 @@ public class LoginFragment extends Fragment {
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * Attempts to log in the account specified by the login form.
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -168,7 +186,7 @@ public class LoginFragment extends Fragment {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check for an empty password, if the user entered one.
         if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
@@ -191,7 +209,8 @@ public class LoginFragment extends Fragment {
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask();
-            mResultLoginUrl = buildUrl(username, password).toString();
+            /* The resulting URL built for the user attempting login. */
+            String mResultLoginUrl = buildUrl(username, password).toString();
             mAuthTask.execute(new String[]{mResultLoginUrl});
         }
     }
@@ -237,16 +256,14 @@ public class LoginFragment extends Fragment {
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Represents an asynchronous login task used to authenticate the user.
      */
     public class UserLoginTask extends AsyncTask<String, Void, String> {
-
 
         @Override
         protected String doInBackground(String... urls) {
             try {
-                // Simulate network access.
+                // Make the progress spin a little bit longer.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return "";
@@ -290,9 +307,11 @@ public class LoginFragment extends Fragment {
                 if (r.equals("success")) {
                     //Open MAIN ACTIVITY and pass the USER to it
                     MainActivity.currentUser = mUsernameView.getText().toString();
-                    Log.i("LoginFragment", MainActivity.currentUser);
 
+                    Log.i("LoginFragment", MainActivity.currentUser);
                     lunchMainActivity();
+
+                    getActivity().finish();
                 } else {
                     String error = obj.getString("error");
                     if (error.equals("Incorrect username.")) {

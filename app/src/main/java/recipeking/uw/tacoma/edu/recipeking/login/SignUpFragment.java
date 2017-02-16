@@ -23,24 +23,30 @@ import java.net.URL;
 import recipeking.uw.tacoma.edu.recipeking.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * to handle interaction events.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A Sign Up Fragment class. This fragment class represents sign up (registration)
+ * for new users.
+ *
  */
 public class SignUpFragment extends Fragment {
 
+    /** String constant for the base URL used for adding new users. */
     private static final String ADD_USER_URL =
             "http://cssgate.insttech.washington.edu/~_450bteam7/adduser.php?";
 
+    /** EditText for the new username. */
     private EditText mUsername;
+
+    /** EditText for the new password. */
     private EditText mPassword;
 
+    /** Sign up task. */
     private AddUserTask mAddUserTask;
 
-
+    /**
+     *  Required empty public constructor
+     */
     public SignUpFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -56,6 +62,10 @@ public class SignUpFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCreate() method for this Fragment.
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +74,14 @@ public class SignUpFragment extends Fragment {
         }
     }
 
+    /**
+     * onCreateView() method for this fragment. Binds the layout views with the class
+     * fields, and sets up listener actions for button clicks.
+     * @param inflater - the inflater of this Fragment.
+     * @param container - the container of this Fragment.
+     * @param savedInstanceState - the savedInstanceState of this Fragment.
+     * @return - a View object.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,10 +101,12 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Attempts to sign up the account specified by the sign up form.
+     * If there are form errors (invalid username, missing fields, etc.), the
+     * errors are presented and no actual sign up attempt is made.
+     */
     private void attemptSignUp() {
-//        if (mAddUserTask != null) {
-//            return;
-//        }
 
         mUsername.setError(null);
         mPassword.setError(null);
@@ -109,7 +129,7 @@ public class SignUpFragment extends Fragment {
             cancel = true;
         }
 
-        // Check for a empty username field.
+        // Check for a empty or invalid username field.
         if (username.isEmpty() || isUsernameInvalid(username)) {
             if(username.isEmpty()) {
                 mUsername.setError(getString(R.string.error_field_required));
@@ -133,19 +153,35 @@ public class SignUpFragment extends Fragment {
 
     }
 
+    /**
+     * Checks if the username is invalid
+     * @param username - the username to be checked.
+     * @return - true if username is invalid, false otherwise.
+     */
     private boolean isUsernameInvalid(String username) {
         return username.contains(" ") || username.length() > 20;
     }
 
+    /**
+     * Checks if the password is valid
+     * @param password - the password to be checked.
+     * @return - true if password is valid, false otherwise.
+     */
     private boolean isPasswordValid(String password) {
         return password.length() > 5;
     }
 
+    /**
+     * Builds the URL for adding a new user to the CSS gate server.
+     *
+     * @param username - the username to be added.
+     * @param password - the password to be added.
+     * @return - a String URL for submitting a new username and password to the CSS Gate server.
+     */
     private String buildAddUserUrl(String username, String password) {
         StringBuilder sb = new StringBuilder(ADD_USER_URL);
 
         try {
-
             sb.append("username=");
             sb.append(username);
 
@@ -163,6 +199,9 @@ public class SignUpFragment extends Fragment {
     }
 
 
+    /**
+     * AsyncTask for adding a new user to the CSS Gate server.
+     */
     private class AddUserTask extends AsyncTask<String, Void, String> {
 
         @Override

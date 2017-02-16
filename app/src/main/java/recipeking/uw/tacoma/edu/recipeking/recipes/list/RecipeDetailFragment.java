@@ -16,27 +16,39 @@ import recipeking.uw.tacoma.edu.recipeking.R;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipeDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Class for RecipeDetailFragment. This class represents the details about a recipe.
+ *
  */
 public class RecipeDetailFragment extends Fragment {
 
+    /** Constant for which recipe has been selected. */
     public final static String RECIPE_ITEM_SELECTED = "recipe_selected";
 
+    /** TextView element for the recipe's title. */
     private TextView mRecipeTitle;
+
+    /** ImageView element for the recipe's image. */
     private ImageView mRecipeImage;
+
+    /** TextView element for the recipe's ingredients. */
     private TextView mRecipeIngredients;
+
+    /** TextView element for the recipe's instructions URL. */
     private TextView mRecipeInstructionsUrl;
+
+    /** Button element for adding or removing the recipe to the favorite list. */
     private Button mFavoriteButton;
 
+
+    /**
+     *  Required empty public constructor
+     */
     public RecipeDetailFragment() {
-        // Required empty public constructor
+
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Method for constructing a new instance of this Fragment.
      *
      * @return A new instance of fragment RecipeDetailFragment.
      */
@@ -47,14 +59,27 @@ public class RecipeDetailFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCreate() method for this Fragment.
+     *
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
+
+    /**
+     *
+     * Inflates the view and the view elements for this Fragment.
+     *
+     * @param inflater - the inflater for this Fragment.
+     * @param container - the container for this Fragment.
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     *
+     * @return - a view object of this Fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,9 +92,11 @@ public class RecipeDetailFragment extends Fragment {
         mFavoriteButton = (Button) view.findViewById(R.id.favorite_button);
 
         return view;
-
     }
 
+    /**
+     * onStart() method for this Fragment. Sets article based on argument passed in.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -79,21 +106,27 @@ public class RecipeDetailFragment extends Fragment {
         // below that sets the article text.
         Bundle args = getArguments();
         if (args != null) {
-            // Set article based on argument passed in
             updateView((Recipe) args.getSerializable(RECIPE_ITEM_SELECTED));
         }
 
     }
 
+    /**
+     * Updates the view for this Fragment based on which recipe has been selected.
+     *
+     * @param recipe - The recipe that has been selected.
+     */
     public void updateView(final Recipe recipe) {
         if (recipe != null) {
             mRecipeTitle.setText(recipe.getmTitle());
 
+            // Downloads the image for the recipe.
             MyRecipeRecyclerViewAdapter.DownloadImageTask task = new MyRecipeRecyclerViewAdapter
                     .DownloadImageTask(mRecipeImage);
-
             task.execute(recipe.getmImageUrl());
 
+
+            // Parsing the ingredients from array to a single string with new line character.
             String joinIngredients = "";
             for(String s : recipe.getmIngredients()) {
                 joinIngredients += s + "\n";
@@ -101,8 +134,8 @@ public class RecipeDetailFragment extends Fragment {
 
             mRecipeIngredients.setText(joinIngredients);
 
-            //mRecipeInstructionsUrl.setContentDescription(recipe.getmInstructionsUrl());
-
+            // Opens the recipe's website for instructions based on the URL.
+            // Implicit intent for opening a webpage.
             mRecipeInstructionsUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,19 +151,23 @@ public class RecipeDetailFragment extends Fragment {
                 }
             });
 
+            // If the recipe is already in the favorite list, set the text accordingly.
             if (MainActivity.favoriteList.contains(recipe)) {
                 mFavoriteButton.setText("Remove from Favorites");
             }
+
 
             mFavoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if(mFavoriteButton.getText().toString().equals("Remove from Favorites")) {
-                        MainActivity.removeFromFavorites(recipe);
+                        // Removes the recipe from the static list.
+                        MainActivity.removeFromFavorites(recipe, getContext());
                         mFavoriteButton.setText("Add to Favorites");
                     } else {
-                        MainActivity.addToFavorites(recipe);
+                        // Adds the recipe to the static list.
+                        MainActivity.addToFavorites(recipe, getContext());
                         mFavoriteButton.setText("Remove from Favorites");
                     }
 
@@ -139,6 +176,5 @@ public class RecipeDetailFragment extends Fragment {
 
         }
     }
-
 
 }

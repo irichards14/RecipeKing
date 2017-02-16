@@ -9,12 +9,16 @@
 
     <EditText
         android:id="@+id/username_signup"
+        android:textColorHint="#cccccc"
+        android:textColor="#cccccc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/sign_up_username"/>
 
     <EditText
         android:id="@+id/password_signup"
+        android:textColorHint="#cccccc"
+        android:textColor="#cccccc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"

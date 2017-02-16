@@ -8,29 +8,43 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
- *
+ * This class represents a Recipe object.
  */
 public class Recipe implements Serializable {
 
+    /** The title of the recipe. */
     private String mTitle;
+
+    /** The image url of the recipe. */
     private String mImageUrl;
+
+    /** The ingredients array of the recipe. */
     private String[] mIngredients;
+
+    /** The instructions url of the recipe. */
     private String mInstructionsUrl;
 
-    public static final String HITS = "hits";
-    public static final String RECIPE = "recipe";
-    public static final String LABEL = "label";
-    public static final String IMAGE = "image";
-    public static final String INGREDIENT_LINES = "ingredientLines";
-    public static final String URL = "url";
+    /** Strings representing JSON data attributes for the external API. */
+    private static final String HITS = "hits";
+    private static final String RECIPE = "recipe";
+    private static final String LABEL = "label";
+    private static final String IMAGE = "image";
+    private static final String INGREDIENT_LINES = "ingredientLines";
+    private static final String URL = "url";
 
-    public static final String TITLE = "title";
-    public static final String USER = "user";
-    public static final String IMAGE_URL = "image_url";
-    public static final String INGREDIENTS = "ingredients";
-    public static final String INSTRUCTIONS_URL = "instructions_url";
+    /** Strings representing JSON data attributes for the favorite list. */
+    private static final String TITLE = "title";
+    private static final String IMAGE_URL = "image_url";
+    private static final String INGREDIENTS = "ingredients";
+    private static final String INSTRUCTIONS_URL = "instructions_url";
 
+    /**
+     * Constructor for the class. Initializes the class' fields.
+     * @param mTitle - the title of the recipe.
+     * @param mImageUrl - the image url of the recipe.
+     * @param mIngredients - the ingredients of the recipe.
+     * @param mInstructionsUrl - the instructions url of the recipes.
+     */
     public Recipe(String mTitle, String mImageUrl, String[] mIngredients, String mInstructionsUrl) {
         this.mTitle = mTitle;
         this.mImageUrl = mImageUrl;
@@ -38,72 +52,109 @@ public class Recipe implements Serializable {
         this.mInstructionsUrl = mInstructionsUrl;
     }
 
+    /**
+     * Gets the recipe's title.
+     * @return - the title.
+     */
     public String getmTitle() {
         return mTitle;
     }
 
+    /**
+     * Gets the recipe's iamge url.
+     * @return - the image url.
+     */
     public String getmImageUrl() {
         return mImageUrl;
     }
 
+    /**
+     * Gets the recipe's ingredients.
+     * @return - string array of ingredients.
+     */
     public String[] getmIngredients() {
         return mIngredients;
     }
 
+    /**
+     * Gets the instructions url.
+     * @return - the instructions url.
+     */
     public String getmInstructionsUrl() {
         return mInstructionsUrl;
     }
 
+    /**
+     * Sets the recipe's title.
+     * @param mTitle - the title of the recipe.
+     */
     public void setmTitle(String mTitle) {
         this.mTitle = mTitle;
     }
 
+    /**
+     * Sets the recipe's image url.
+     * @param mImageUrl - the image url of the recipe.
+     */
     public void setmImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
 
+    /**
+     * Sets the recipe's instructions url.
+     * @param mInstructionsUrl - the instructions url of the recipe.
+     */
     public void setmInstructionsUrl(String mInstructionsUrl) {
         this.mInstructionsUrl = mInstructionsUrl;
     }
 
+    /**
+     * Sets the recipe's ingredients.
+     * @param mIngredients - the ingredients of the recipe.
+     */
     public void setmIngredients(String[] mIngredients) {
         this.mIngredients = mIngredients;
     }
 
+    /**
+     * Method for parsing JSON data from the external API. Parses the data and fills a list
+     * of recipes based on the JSON data.
+     * @param recipesJSON - the JSON data string retrieved from the server.
+     * @param recipeList - the recipe list that needs to be filled with data.
+     * @return - a String. If null than successful, else something went wrong.
+     */
     public static String parseRecipesJSON(String recipesJSON, List<Recipe> recipeList) {
         String reason = null;
         if (recipesJSON != null) {
             try {
                 JSONObject obj = new JSONObject(recipesJSON);
                 JSONArray arr = obj.getJSONArray(Recipe.HITS);
+
+                // Goes through all JSON data objects retrieved from external API,
+                // and processes them accordingly.
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject rObj = arr.getJSONObject(i);
                     JSONObject recipeJson = rObj.getJSONObject(Recipe.RECIPE);
 
                     String label = recipeJson.getString(Recipe.LABEL);
-                    //System.out.println(label);
 
                     String image = recipeJson.getString(Recipe.IMAGE);
-                    //System.out.println(image);
 
                     JSONArray JSONingredients = recipeJson.getJSONArray(Recipe.INGREDIENT_LINES);
+                    //Fills array based on JSON array elements.
                     String[] ingred = new String[JSONingredients.length()];
                     for (int j = 0; j < ingred.length; j++) {
                         ingred[j] = JSONingredients.getString(j);
                     }
 
-                    //                for(String s : ingred) {
-                    //                    System.out.println(s);
-                    //                }
-
                     String url = recipeJson.getString(Recipe.URL);
-                    //System.out.println(url);
 
+                    // Construct Recipe object based on the retrieved data.
                     Recipe recipe = new Recipe(label, image, ingred, url);
+
+                    // Adds the Recipe object to the list.
                     recipeList.add(recipe);
                 }
-
-                //System.out.println(arr.length());
 
             } catch (JSONException e) {
                 reason = "Unable to parse data, Reason: " + e.getMessage();
@@ -112,10 +163,17 @@ public class Recipe implements Serializable {
         return reason;
     }
 
+    /**
+     * Method for parsing JSON data from the CSSGate Server
+     * for the favorite list. Parses the data and fills a list of recipes based on
+     * the JSON data.
+     * @param recipesJSON - the JSON data string retrieved from the CSSGATE Server.
+     * @param recipeList - the recipe list that needs to be filled with data.
+     * @return - a String. If null than successful, else something went wrong.
+     */
     public static String parseFavRecipesJSON(String recipesJSON, List<Recipe> recipeList) {
         String reason = null;
         if(recipesJSON != null) {
-
             try {
                 JSONArray arr = new JSONArray(recipesJSON);
 
@@ -123,7 +181,6 @@ public class Recipe implements Serializable {
                     JSONObject obj = arr.getJSONObject(i);
 
                     String title = obj.getString(Recipe.TITLE);
-                    //String user = obj.getString(Recipe.USER);
                     String img_url = obj.getString(Recipe.IMAGE_URL);
                     String ingredients = obj.getString(Recipe.INGREDIENTS);
 
@@ -138,7 +195,6 @@ public class Recipe implements Serializable {
             } catch (JSONException e) {
                 reason = "Unable to parse data, Reason: " + e.getMessage();
             }
-
         }
         return reason;
     }

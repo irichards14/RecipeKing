@@ -12,5 +12,6 @@
     <color name='myColorPrimary'>#C70039</color>
     <color name='myColorPrimaryDark'>#900C3f</color>
     <color name='myAccentColor'>#581845</color>
+    <color name="myAccentTextColor">#f1f1f1</color>
 
 </resources>

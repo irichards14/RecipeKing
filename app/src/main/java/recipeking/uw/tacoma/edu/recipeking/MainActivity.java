@@ -1,5 +1,6 @@
 package recipeking.uw.tacoma.edu.recipeking;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -27,43 +29,49 @@ import java.util.List;
 import recipeking.uw.tacoma.edu.recipeking.login.LoginActivity;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 
+/**
+ *
+ * This class represents the MainActivity, i.e. the home activity for the user
+ * after log in.
+ *
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    /** String constant for the base URL for getting favorites list from the server. */
     private static final String BASE_FAV_URL
             = "http://cssgate.insttech.washington.edu/~_450bteam7/favorites_list.php?";
 
+    /** String constant for the base URL for adding a recipe to the favorite list
+     * on the server. */
     private static final String ADD_FAV_URL
             = "http://cssgate.insttech.washington.edu/~_450bteam7/addFavorite.php?";
 
+    /** String constant for the base URL for removing a recipe from the favorite list
+     * on the server. */
     private static final String REMOVE_FAV_URL
             = "http://cssgate.insttech.washington.edu/~_450bteam7/removeFavorite.php?";
 
+    /** String constant for keeping track of the current logged in user by its username. */
     public static String currentUser;
 
+    /** A list of favorite recipes for the current logged in user. */
     public static List<Recipe> favoriteList;
 
+    /**
+     * onCreate method for the current activity. Initializing the toolbar,
+     * navigation drawer, and updating the greeting message based on the current user.
+     *
+     * @param savedInstanceState - the saved arguments for this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            DownloadFavoritesTask task = new DownloadFavoritesTask();
-            task.execute(new String[]{buildFavUlr()});
-        }
-
+        Log.i("MainActivity", "onCreate()");
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,23 +82,81 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = (TextView) headerView.findViewById(R.id.nav_username_greeting);
+        String msg = getString(R.string.greeting_message) + " " + currentUser;
+        textView.setText(msg);
+
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//        super.onSaveInstanceState(outState, outPersistentState);
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//    }
+    /**
+     * onStart() method for this activity. Retrieves the favorite list data
+     * for the current user.
+     *
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        Log.i("MainActivity", "onStart()");
+
+        DownloadFavoritesTask task = new DownloadFavoritesTask();
+        task.execute(new String[]{buildFavUlr()});
+
+    }
+
+    /**
+     * onPause() method for this activity. For debugging purposes.
+     *
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("MainActivity", "onPause()");
+    }
+
+    /**
+     * onRestart() method for this activity. For debugging purposes.
+     */
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("MainActivity", "onRestart()");
+    }
+
+    /**
+     * onResume() method for this activity. For debugging purposes.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("MainActivity", "onResume()");
+
+    }
+
+
+    /**
+     * onStop() method for this activity. For debugging purposes.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("MainActivity", "onStop()");
+    }
+
+    /**
+     * onDestroy() method for this activity. For debugging purposes.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("MainActivity", "onDestroy()");
+    }
+
+    /**
+     * onBackPressed() method for this activity. It enables switching back to this activity
+     * when the navigation drawer is open.
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,6 +167,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method for inflating menus.
+     *
+     * @param menu - the menu to be inflated.
+     * @return - boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -108,6 +180,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Method for selected menu item.
+     *
+     * @param item - the menu which has been selected.
+     * @return - boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -124,45 +202,64 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Opens the CategoriesActivity.
+     *
+     * @param view - the view object that has called this method.
+     */
     public void showCategoriesActivity(View view) {
         Intent intent = new Intent(this, CategoriesActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Opens the FavoritesActivity.
+     *
+     * @param view - the view object that has called this method.
+     */
     public void showFavoritesActivity(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
 
-    public void showMyRecipiesActivity(View view) {
+    /**
+     * Opens the MyRecipesActivity.
+     *
+     * @param view - the view object that has called this method.
+     */
+    public void showMyRecipesActivity(View view) {
         Intent intent = new Intent(this, MyRecipesActivity.class);
         startActivity(intent);
     }
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /**
+     *
+     * Method handler when an item has been selected on the navigation drawer.
+     *
+     * @param item - The item that has been selected.
+     * @return - boolean
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_browse_categories) {
-            // Handle the camera action
             showCategoriesActivity(null);
         } else if (id == R.id.nav_favorites) {
             showFavoritesActivity(null);
         } else if (id == R.id.nav_my_recipes) {
-            showMyRecipiesActivity(null);
-        } else if (id == R.id.nav_menu4) {
+            showMyRecipesActivity(null);
+        } else if (id == R.id.nav_logout) {
             currentUser = null;
             favoriteList = null;
+            Log.i("MainActivity", "currentUser set to null. favoriteList set to null.");
+            Log.i("MainActivity", "Logging out");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -170,17 +267,29 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public static void addToFavorites(Recipe recipe) {
+    /**
+     * Static method for adding a recipe to the favorite list.
+     *
+     * @param recipe - The recipe to be added.
+     * @param context - The context which is calling this method. Used for Toast messages.
+     */
+    public static void addToFavorites(Recipe recipe, Context context) {
         // Add to local list
         MainActivity.favoriteList.add(recipe);
 
         // Add to the Server
         AddToFavoritesList task = new AddToFavoritesList();
-        task.execute(buildAddFavUlr(recipe));
+        task.execute(buildAddFavUlr(recipe, context));
+        Log.i("MainActivity", "Recipe added to server");
     }
 
-
-    public static void removeFromFavorites(Recipe recipe) {
+    /**
+     * Static method for removing a recipe from the favorite list.
+     *
+     * @param recipe - The recipe to be removed.
+     * @param context - The context which is calling this method. Used for Toast messages.
+     */
+    public static void removeFromFavorites(Recipe recipe, Context context) {
         // Remove from local list
         if (!MainActivity.favoriteList.isEmpty()) {
             MainActivity.favoriteList.remove(recipe);
@@ -188,10 +297,15 @@ public class MainActivity extends AppCompatActivity
 
         // Remove from Server
         AddToFavoritesList task = new AddToFavoritesList();
-        task.execute(buildRemoveFavUrl(recipe));
-
+        task.execute(buildRemoveFavUrl(recipe, context));
+        Log.i("MainActivity", "Recipe removed from server");
     }
 
+    /**
+     * Method for building the favorite list URL.
+     *
+     * @return - the custom URL for the current user's favorite list.
+     */
     private String buildFavUlr() {
         StringBuilder sb = new StringBuilder(BASE_FAV_URL);
 
@@ -211,7 +325,15 @@ public class MainActivity extends AppCompatActivity
         return sb.toString();
     }
 
-    private static String buildAddFavUlr(Recipe recipe) {
+    /**
+     *
+     * Method for building the add to favorites URL.
+     *
+     * @param recipe - The recipe that is to be added.
+     * @param context - The context which is calling this method.
+     * @return - The URL for adding a favorite recipe for the current user.
+     */
+    private static String buildAddFavUlr(Recipe recipe, Context context) {
         StringBuilder sb = new StringBuilder(ADD_FAV_URL);
 
         try {
@@ -242,15 +364,24 @@ public class MainActivity extends AppCompatActivity
 
 
         } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(),
-//                    "Something wrong with the AddFavlist url" + e.getMessage(),
-//                    Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(),
+                    "Something wrong with the AddFavlist url" + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
         }
 
         return sb.toString();
     }
 
-    private static String buildRemoveFavUrl(Recipe recipe) {
+
+    /**
+     *
+     * Method for building the remove from favorites URL.
+     *
+     * @param recipe - The recipe that is to be removed.
+     * @param context - The context which is calling this method.
+     * @return - The URL for removing a favorite recipe for the current user.
+     */
+    private static String buildRemoveFavUrl(Recipe recipe, Context context) {
         StringBuilder sb = new StringBuilder(REMOVE_FAV_URL);
 
         try {
@@ -263,14 +394,17 @@ public class MainActivity extends AppCompatActivity
             sb.append((URLEncoder.encode(title, "UTF-8")));
 
         } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(),
-//                    "Something wrong with the RemoveFavlist url" + e.getMessage(),
-//                    Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(),
+                    "Something wrong with the RemoveFavlist url" + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
         }
 
         return sb.toString();
     }
 
+    /**
+     * AsynTask class for downloading the recipe list for the current user from the server.
+     */
     private class DownloadFavoritesTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -302,24 +436,31 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected void onPostExecute(String result) {
+            // List is empty
             if (result.startsWith("Unable to")) {
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-                        .show();
+
                 return;
             }
 
             favoriteList = new ArrayList<>();
+
+            Log.i("MainActivity", "new favList about to be filled");
+            // Populate the favoriteList for the current user based on the JSON data received
+            // from the server.
             result = Recipe.parseFavRecipesJSON(result, favoriteList);
 
+            Log.i("MainActivity", "favList filled from server");
+
             if(result != null) {
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-                        .show();
                 return;
             }
 
         }
     }
 
+    /**
+     * AsyncTask class for adding (or removing) a favorite recipe to the server.
+     */
     private static class AddToFavoritesList extends AsyncTask<String, Void, String> {
 
         @Override
@@ -353,29 +494,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected void onPostExecute(String result) {
-            // Something wrong with the network or the URL.
-//            try {
-//
-//                JSONObject jsonObject = new JSONObject(result);
-//                String status = (String) jsonObject.get("result");
-//                if (status.equals("success")) {
-//                    Toast.makeText(getApplicationContext(), "Added to favorites"
-//                            , Toast.LENGTH_LONG)
-//                            .show();
-//                } else if (status.equals("success2")) {
-//                    Toast.makeText(getApplicationContext(), "Removed to favorites"
-//                            , Toast.LENGTH_LONG)
-//                            .show();
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Failed to add(remove): "
-//                                    + jsonObject.get("error")
-//                            , Toast.LENGTH_LONG)
-//                            .show();
-//                }
-//            } catch (JSONException e) {
-//                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-//                        e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
+           super.onPostExecute(result);
         }
 
 

@@ -13,4 +13,12 @@
     tools:context="recipeking.uw.tacoma.edu.recipeking.MyRecipesActivity"
     tools:showIn="@layout/activity_my_recipes">
 
+    <ImageView
+        android:id="@+id/activity_my_recipes_no_recipe_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/no_recipes"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

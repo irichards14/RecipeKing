@@ -6,10 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import recipeking.uw.tacoma.edu.recipeking.R;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * onCreate() method for this activity.
+     * Loads the login fragment.
+     * @param savedInstanceState - the savedInstanceState for this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +28,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
 
 }
 

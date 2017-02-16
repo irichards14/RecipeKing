@@ -14,6 +14,18 @@
               android:weightSum="1">
 
     <TextView
+        android:id="@+id/nav_username_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textSize="14sp"
+        android:text="Hello, "
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/myAccentTextColor"
+        android:layout_gravity="right"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RecipeKing"
@@ -22,12 +34,5 @@
         android:fontFamily="cursive"
         />
 
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--app:srcCompat="@mipmap/logo_text"-->
-        <!--android:adjustViewBounds="false"/>-->
 
 </LinearLayout>

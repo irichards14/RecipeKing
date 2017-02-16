@@ -34,31 +34,28 @@ import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
  */
 public class RecipeFragment extends Fragment {
 
+    /** Constants for building the API Url. */
     private static final String BASE_API_URL = "https://api.edamam.com/search?", PARAM_QUERY =
             "q", APP_ID = "app_id", APP_ID_VALUE = "207c8c04", APP_KEY = "app_key", APP_KEY_VALUE
             = "045854ce8fa13ee1b1b2c482677ec902", FROM = "from", FROM_VALUE = "0", TO = "to",
-            TO_VALUE = "20";
+            TO_VALUE = "30";
 
-//    private static final String BASE_FAV_URL
-//            = "http://cssgate.insttech.washington.edu/~_450bteam7/favorites_list.php?";
-//
-//    private static final String ADD_FAV_URL
-//            = "http://cssgate.insttech.washington.edu/~_450bteam7/addFavorite.php?";
-//
-//    private static final String REMOVE_FAV_URL
-//            = "http://cssgate.insttech.washington.edu/~_450bteam7/removeFavorite.php?";
-
-
+    /** String for the current resulting API. */
     private static String mResultAPIUrl;
 
+    /** If the RecipeFragment was called from FavoritesActivity. */
     private static boolean favoriteMode;
 
-
+    /** String message for counting the column for this Fragment (List). */
     private static final String ARG_COLUMN_COUNT = "column-count";
 
+    /** Field for counting the columns for this Fragment(List). */
     private int mColumnCount = 1;
 
+    /** Field for the RecyclerViewer for this Fragment (List). */
     private RecyclerView mRecyclerView;
+
+    /** Listener field for interacting with this Fragment (List). */
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -69,6 +66,14 @@ public class RecipeFragment extends Fragment {
     }
 
 
+    /**
+     * Method for constructing a new instance of this Fragment (List).
+     *
+     * @param contentSearch - is the message passed to this fragment, so it will build
+     *                      the API URL based on the query (message).
+     * @param mode - boolean for which mode this fragment was called. true is for Favorites.
+     * @return - a new Fragment (List).
+     */
     public static RecipeFragment newInstance(String contentSearch, boolean mode) {
         RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
@@ -82,6 +87,10 @@ public class RecipeFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCrate() for this Fragment. Initializes the mColumnCount.
+     * @param savedInstanceState - the saved arguments for this activity.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +100,18 @@ public class RecipeFragment extends Fragment {
         }
     }
 
+    /**
+     * Inflates the view and the view elements for this Fragment.
+     * If this Fragment was called in favorite mode, it bind the mRecyclerView to the static
+     * favoriteList for the current user. If it was not in favorite mode, it uses the API Url
+     * based on the query passed.
+     *
+     * @param inflater - the inflater for this Fragment (List).
+     * @param container - the container for this Fragment (List).
+     * @param savedInstanceState - the savedInstanceState for this Fragment (List).
+     *
+     * @return - a view object of this Fragment(List).
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,13 +127,24 @@ public class RecipeFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 //            recyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(Recipe.ITEMS, mListener));
-            DownloadRecipesTask task = new DownloadRecipesTask();
-            task.execute(new String[] {mResultAPIUrl});
+            if (!favoriteMode) {
+                DownloadRecipesTask task = new DownloadRecipesTask();
+                task.execute(new String[] {mResultAPIUrl});
+            } else {
+                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(MainActivity.favoriteList,
+                        mListener));
+            }
 
         }
         return view;
     }
 
+    /**
+     * onAttach() method for this Fragment (List). It sets the Listener based on the context.
+     *
+     * @param context - the current context.
+     * @throws RuntimeException - if the calling activity didn't implement the listener.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -124,6 +156,9 @@ public class RecipeFragment extends Fragment {
         }
     }
 
+    /**
+     * onDetach() method for this Fragment (List).
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -170,26 +205,10 @@ public class RecipeFragment extends Fragment {
         return url;
     }
 
-//    private String buildFavUlr() {
-//        StringBuilder sb = new StringBuilder(BASE_FAV_URL);
-//
-//        try {
-//            String user = MainActivity.currentUser;
-//            sb.append("usr=");
-//            sb.append(URLEncoder.encode(user, "UTF-8"));
-//
-//            Log.i("Recipe(FavList)Fragment", sb.toString());
-//
-//        } catch (Exception e) {
-//            Toast.makeText(getActivity().getApplicationContext(),
-//                    "Something wrong with the favlist url" + e.getMessage(),
-//                    Toast.LENGTH_LONG).show();
-//        }
-//
-//        return sb.toString();
-//    }
-
-
+    /**
+     * AsyncTask for downloading the recipes from the built API URL. Sets the RecyclerView
+     * based on the generated list of recipes.
+     */
     private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -236,13 +255,8 @@ public class RecipeFragment extends Fragment {
                 return;
             }
 
-            if (favoriteMode) {
-                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(MainActivity.favoriteList,
-                        mListener));
-            } else {
-                if (!recipeList.isEmpty()) {
-                    mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(recipeList, mListener));
-                }
+            if (!recipeList.isEmpty()) {
+                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(recipeList, mListener));
             }
 
         }

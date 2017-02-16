@@ -9,31 +9,64 @@ import recipeking.uw.tacoma.edu.recipeking.recipes.list.RecipeDetailFragment;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.RecipeFragment;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 
+/**
+ * This class represents the FavoritesActivity. Here it will display the user's favorite
+ * recipes as a list.
+ *
+ */
 public class FavoritesActivity extends AppCompatActivity implements
         RecipeFragment.OnListFragmentInteractionListener {
 
+    /**
+     * onCreate method for the current activity. It creates a recipe fragment (list)
+     * only if the user's favoriteList is not empty.
+     *
+     * @param savedInstanceState - the saved arguments for this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if ((savedInstanceState == null
-                && findViewById(R.id.activity_favorites_fragment_container) != null)
-                || getSupportFragmentManager().findFragmentById(R.id.list) == null) {
+        if ((savedInstanceState == null)
+                && (findViewById(R.id.activity_favorites_fragment_container) != null)) {
 
-            ImageView img = (ImageView) findViewById(R.id.activity_favorites_nofav_image);
-            img.setVisibility(View.GONE);
+            if (!MainActivity.favoriteList.isEmpty()) {
 
-            RecipeFragment recipeFragment = RecipeFragment.newInstance("", true);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.activity_favorites_fragment_container, recipeFragment)
-                    .commit();
+                // Creates new instance of recipeFragment, passing it true indicating that
+                // it is in favorite mode.
+                RecipeFragment recipeFragment = RecipeFragment.newInstance("", true);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.activity_favorites_fragment_container, recipeFragment)
+                        .commit();
+            }
 
         }
 
     }
 
+    /**
+     * onStart() method for this activity. Checks if the favoriteList is empty, if it is
+     * makes the illustration visible, if not it hides the illustration.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ImageView img = (ImageView) findViewById(R.id.activity_favorites_nofav_image);
+        if (!MainActivity.favoriteList.isEmpty()) {
+            img.setVisibility(View.GONE);
+        } else {
+            img.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    /**
+     * Listener method for interacting with a item on the fragment list. When an item is clicked
+     * it opens the RecipeDetailFragment.
+     * @param item - The recipe that has been clicked.
+     */
     @Override
     public void onListFragmentInteraction(Recipe item) {
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
@@ -41,22 +74,11 @@ public class FavoritesActivity extends AppCompatActivity implements
         args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, item);
         recipeDetailFragment.setArguments(args);
 
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.activity_favorites_fragment_container, recipeDetailFragment)
                 .addToBackStack(null)
                 .commit();
     }
-
-//    public void openInstructionsUrl(View view) {
-//        String url = view.getContentDescription().toString();
-//        Uri webpage = Uri.parse(url);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-//        String title = getResources().getString(R.string.chooser_title);
-//        Intent chooser = Intent.createChooser(intent, title);
-//
-//        if(intent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(chooser);
-//        }
-//    }
 
 }
