@@ -24,7 +24,9 @@ import java.util.List;
 
 import recipeking.uw.tacoma.edu.recipeking.MainActivity;
 import recipeking.uw.tacoma.edu.recipeking.R;
+import recipeking.uw.tacoma.edu.recipeking.data.RecipeDB;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
+import recipeking.uw.tacoma.edu.recipeking.utils.NetworkUtils;
 
 /**
  * A fragment representing a list of Items.
@@ -43,8 +45,9 @@ public class RecipeFragment extends Fragment {
     /** String for the current resulting API. */
     private static String mResultAPIUrl;
 
-    /** If the RecipeFragment was called from FavoritesActivity. */
-    private static boolean favoriteMode;
+    /** Keeps track in what mode this fragment is called. 1 is for API results. 2 for favorites.
+     * 3 for MyRecipes */
+    private static int fragmentMode;
 
     /** String message for counting the column for this Fragment (List). */
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -57,6 +60,12 @@ public class RecipeFragment extends Fragment {
 
     /** Listener field for interacting with this Fragment (List). */
     private OnListFragmentInteractionListener mListener;
+
+    /** Local recipe database storing info when network connection is unavailable. */
+    private RecipeDB mRecipeDB;
+
+    /** A recipe list for storing the local recipe data from the local Recipe database. */
+    private List<Recipe> mRecipeList;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,13 +83,13 @@ public class RecipeFragment extends Fragment {
      * @param mode - boolean for which mode this fragment was called. true is for Favorites.
      * @return - a new Fragment (List).
      */
-    public static RecipeFragment newInstance(String contentSearch, boolean mode) {
+    public static RecipeFragment newInstance(String contentSearch, int mode) {
         RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
         //args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
 
-        favoriteMode = mode;
+        fragmentMode = mode;
 
         mResultAPIUrl = buildUrl(contentSearch).toString();
 
@@ -126,13 +135,36 @@ public class RecipeFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(Recipe.ITEMS, mListener));
-            if (!favoriteMode) {
-                DownloadRecipesTask task = new DownloadRecipesTask();
-                task.execute(new String[] {mResultAPIUrl});
-            } else {
-                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(MainActivity.favoriteList,
-                        mListener));
+
+            switch (fragmentMode) {
+                case 1:
+                    if (NetworkUtils.networkConnectionAvailable(getActivity())) {
+                        DownloadRecipesTask task = new DownloadRecipesTask();
+                        task.execute(new String[] {mResultAPIUrl});
+                    } else {
+                        Toast.makeText(getActivity(), "No network connection available. " +
+                                "Displaying locally stored data",
+                                Toast.LENGTH_SHORT) .show();
+                        //Fill the local list of recipe with data from the local Recipe database
+//                        if(mRecipeDB == null) {
+//                            mRecipeDB = new RecipeDB(getActivity());
+//                        }
+//                        if (mRecipeList == null) {
+//                            mRecipeList = mRecipeDB.getRecipes();
+//                        }
+//                        mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(mRecipeList,
+//                                mListener));
+                    }
+                    break;
+                case 2:
+                    mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(MainActivity.favoriteList,
+                            mListener));
+                    break;
+                case 3:
+
+                    break;
+                default:
+                    break;
             }
 
         }
@@ -266,6 +298,25 @@ public class RecipeFragment extends Fragment {
             }
 
             if (!recipeList.isEmpty()) {
+//                if (mRecipeDB == null) {
+//                    mRecipeDB = new RecipeDB(getActivity());
+//                }
+
+                // Delete old data so that you can refresh the local
+                // database with the network data.
+                //mRecipeDB.deleteRecipes();
+
+                // Fetch the network data and update the local database
+//                for (int i = 0; i < recipeList.size(); i++) {
+//                    Recipe recipe = recipeList.get(i);
+//                    String ingred = "";
+//                    for (String s : recipe.getmIngredients()) {
+//                        ingred += s + "\n";
+//                    }
+//                    mRecipeDB.insertRecipe(recipe.getmTitle(), recipe.getmImageUrl(),
+//                            ingred, recipe.getmInstructionsUrl());
+//                }
+
                 mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(recipeList, mListener));
             }
 

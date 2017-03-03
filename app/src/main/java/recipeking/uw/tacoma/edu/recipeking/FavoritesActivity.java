@@ -34,9 +34,9 @@ public class FavoritesActivity extends AppCompatActivity implements
 
             if (!MainActivity.favoriteList.isEmpty()) {
 
-                // Creates new instance of recipeFragment, passing it true indicating that
+                // Creates new instance of recipeFragment, passing it 2, indicating that
                 // it is in favorite mode.
-                RecipeFragment recipeFragment = RecipeFragment.newInstance("", true);
+                RecipeFragment recipeFragment = RecipeFragment.newInstance("", 2);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.activity_favorites_fragment_container, recipeFragment)
                         .commit();

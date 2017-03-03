@@ -2,6 +2,7 @@ package recipeking.uw.tacoma.edu.recipeking;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -257,6 +258,14 @@ public class MainActivity extends AppCompatActivity
             favoriteList = null;
             Log.i("MainActivity", "currentUser set to null. favoriteList set to null.");
             Log.i("MainActivity", "Logging out");
+
+            SharedPreferences sharedPreferences =
+                    getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
+                    .commit();
+
+            sharedPreferences.edit().putString(getString(R.string.CURRENT_USER), null);
+
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

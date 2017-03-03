@@ -3,7 +3,9 @@ package recipeking.uw.tacoma.edu.recipeking.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,6 +34,7 @@ import java.net.URL;
 
 import recipeking.uw.tacoma.edu.recipeking.MainActivity;
 import recipeking.uw.tacoma.edu.recipeking.R;
+import recipeking.uw.tacoma.edu.recipeking.utils.NetworkUtils;
 
 /**
  * A login Fragment class. This fragment class represents login.
@@ -59,6 +62,8 @@ public class LoginFragment extends Fragment {
 
     /** TextView for the sign up option. */
     private TextView mSignUpTextView;
+
+    private SharedPreferences mSharedPreferences;
 
 
     /**
@@ -92,6 +97,15 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mSharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                , Context.MODE_PRIVATE);
+        if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
+            MainActivity.currentUser = mSharedPreferences.getString(getString(R.string
+                    .CURRENT_USER), "");
+            lunchMainActivity();
+            getActivity().finish();
+        }
+
     }
 
     /**
@@ -116,8 +130,15 @@ public class LoginFragment extends Fragment {
         mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                if (NetworkUtils.networkConnectionAvailable(getActivity())) {
+                    attemptLogin();
+                } else {
+                    Toast.makeText(getActivity(), "No network connection available.",
+                            Toast.LENGTH_SHORT) .show();
+                }
+
             }
+
         });
 
         mLoginFormView = view.findViewById(R.id.login_form);
@@ -316,13 +337,24 @@ public class LoginFragment extends Fragment {
                 String r = obj.getString("result");
 
                 if (r.equals("success")) {
+                    //Save the application state as logged in.
+                    mSharedPreferences
+                            .edit()
+                            .putBoolean(getString(R.string.LOGGEDIN), true)
+                            .commit();
+
+                    //Save the current user as logged in.
+                    mSharedPreferences.edit().putString(getString(R.string.CURRENT_USER),
+                            mUsernameView.getText().toString()).commit();
+
                     //Open MAIN ACTIVITY and pass the USER to it
                     MainActivity.currentUser = mUsernameView.getText().toString();
 
                     Log.i("LoginFragment", MainActivity.currentUser);
-                    lunchMainActivity();
 
+                    lunchMainActivity();
                     getActivity().finish();
+
                 } else {
                     String error = obj.getString("error");
                     if (error.equals("Incorrect username.")) {
@@ -352,8 +384,6 @@ public class LoginFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
-
-
 
 
 }

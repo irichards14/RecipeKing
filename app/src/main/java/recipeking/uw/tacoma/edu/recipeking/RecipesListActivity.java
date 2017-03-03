@@ -42,7 +42,7 @@ public class RecipesListActivity extends AppCompatActivity implements
 
 
             Log.i("RecipesListActivity", "recipeFragment about to be created");
-            RecipeFragment recipeFragment = RecipeFragment.newInstance(message, false);
+            RecipeFragment recipeFragment = RecipeFragment.newInstance(message, 1);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_recipes_list_fragment_container, recipeFragment)
                     .commit();
@@ -51,7 +51,6 @@ public class RecipesListActivity extends AppCompatActivity implements
         }
 
     }
-
 
     /**
      * Listener method for interacting with a item on the fragment list. When an item is clicked
