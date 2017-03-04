@@ -3,8 +3,7 @@
           package="recipeking.uw.tacoma.edu.recipeking">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -16,11 +15,13 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".CategoriesActivity"
@@ -41,12 +42,19 @@
             android:name=".login.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/LoginTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".CookingArticlesActivity"
+            android:label="Popular Cooking Articles">
+        </activity>
+        <activity
+            android:name=".CookingVideosActivity"
+            android:label="Popular Recipe Videos">
         </activity>
     </application>
 

@@ -269,6 +269,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_pop_articles) {
+            Intent intent = new Intent(this, CookingArticlesActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_pop_videos) {
+            Intent intent = new Intent(this, CookingVideosActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

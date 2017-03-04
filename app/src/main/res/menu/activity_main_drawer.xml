@@ -23,13 +23,13 @@
     <item android:title="More options">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_pop_articles"
+                android:icon="@drawable/ic_articles_black_24dp"
+                android:title="Popular articles" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_pop_videos"
+                android:icon="@drawable/ic_video_black_24dp"
+                android:title="Popular videos" />
         </menu>
     </item>
 
