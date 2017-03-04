@@ -6,8 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+/**
+ * This class represents an activity for cooking videos.
+ */
 public class CookingVideosActivity extends AppCompatActivity {
 
+    /**
+     * onCreate method for the this activity. Sets the layout.
+     * @param savedInstanceState - the saved arguments for this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +23,10 @@ public class CookingVideosActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Opens a youtube video based on what the user clicked.
+     * @param view - The view object that called this method.
+     */
     public void openVideo(View view) {
         String url = "";
 

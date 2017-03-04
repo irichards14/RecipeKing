@@ -38,18 +38,13 @@ public class RecipeDB {
     /**
      * Inserts the recipe into the local sqlite table. Returns true if successful, false otherwise.
      * @param title - the title of the recipe
-     * @param imgUrl - the image url of the recipe
-     * @param ingredients - the ingredients of the recipe
-     * @param instructionsUrl - the instructions url of the recipe
+     * @param recipeDetails - the image url of the recipe
      * @return true or false
      */
-    public boolean insertRecipe(String title, String imgUrl, String ingredients,
-                                String instructionsUrl) {
+    public boolean insertRecipe(String title, String recipeDetails) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", title);
-        contentValues.put("imgUrl", imgUrl);
-        contentValues.put("ingredients", ingredients);
-        contentValues.put("instructionsUrl", instructionsUrl);
+        contentValues.put("recipe_details", recipeDetails);
 
         long rowId = mSQLiteDatabase.insert("Recipe", null, contentValues);
         return rowId != -1;
@@ -62,8 +57,7 @@ public class RecipeDB {
     public List<Recipe> getRecipes() {
 
         String[] columns = {
-                "title", "imgUrl", "ingredients", "instructionsUrl"
-        };
+                "title", "recipe_details"};
 
         Cursor c = mSQLiteDatabase.query(
                 RECIPE_TABLE,  // The table to query
@@ -78,13 +72,9 @@ public class RecipeDB {
         List<Recipe> list = new ArrayList<Recipe>();
         for (int i=0; i<c.getCount(); i++) {
             String title = c.getString(0);
-            String imgUrl = c.getString(1);
-            String ingredients = c.getString(2);
-            String instructionsUrl = c.getString(3);
+            String recipe_details = c.getString(1);
 
-            String ingred[] = ingredients.split("\\n");
-
-            Recipe recipe = new Recipe(title, imgUrl, ingred, instructionsUrl);
+            Recipe recipe = new Recipe(title, recipe_details);
             list.add(recipe);
             c.moveToNext();
         }

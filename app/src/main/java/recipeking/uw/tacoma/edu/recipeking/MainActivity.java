@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import recipeking.uw.tacoma.edu.recipeking.login.LoginActivity;
+import recipeking.uw.tacoma.edu.recipeking.myrecipes.MyRecipesActivity;
 import recipeking.uw.tacoma.edu.recipeking.recipes.list.recipe.Recipe;
 
 /**

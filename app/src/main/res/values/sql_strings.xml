@@ -2,8 +2,7 @@
 <resources>
     <string name="CREATE_RECIPE_SQL">
     CREATE TABLE IF NOT EXISTS Recipe
-    (title TEXT PRIMARY KEY, imgUrl TEXT, ingredients TEXT,
-    instructionsUrl TEXT)
+    (title TEXT PRIMARY KEY, recipe_details TEXT)
     </string>
 
     <string name="DROP_RECIPE_SQL">

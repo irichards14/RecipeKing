@@ -24,6 +24,9 @@ public class Recipe implements Serializable {
     /** The instructions url of the recipe. */
     private String mInstructionsUrl;
 
+    /** This field is used for user defined recipes. */
+    private String mRecipeDetails;
+
     /** Strings representing JSON data attributes for the external API. */
     private static final String HITS = "hits";
     private static final String RECIPE = "recipe";
@@ -37,6 +40,7 @@ public class Recipe implements Serializable {
     private static final String IMAGE_URL = "image_url";
     private static final String INGREDIENTS = "ingredients";
     private static final String INSTRUCTIONS_URL = "instructions_url";
+    private static final String RECIPE_DETAILS = "recipe_details";
 
     /**
      * Constructor for the class. Initializes the class' fields.
@@ -50,6 +54,11 @@ public class Recipe implements Serializable {
         this.mImageUrl = mImageUrl;
         this.mIngredients = mIngredients;
         this.mInstructionsUrl = mInstructionsUrl;
+    }
+
+    public Recipe(String mTitle, String mRecipeDetails) {
+        this.mTitle = mTitle;
+        this.mRecipeDetails = mRecipeDetails;
     }
 
     /**
@@ -82,6 +91,15 @@ public class Recipe implements Serializable {
      */
     public String getmInstructionsUrl() {
         return mInstructionsUrl;
+    }
+
+
+    /**
+     * Gets the recipe details for user defined recipes.
+     * @return - a string.
+     */
+    public String getmRecipeDetails() {
+        return mRecipeDetails;
     }
 
     /**
@@ -192,6 +210,34 @@ public class Recipe implements Serializable {
                     recipeList.add(recipe);
 
                 }
+            } catch (JSONException e) {
+                reason = "Unable to parse data, Reason: " + e.getMessage();
+            }
+        }
+        return reason;
+    }
+
+    public static String parseMyRecipesJSON(String myRecipeJSON, List<Recipe> recipeList) {
+        String reason = null;
+        if(myRecipeJSON != null) {
+            try {
+
+                if(!myRecipeJSON.contains("fail")) {
+                    JSONArray arr = new JSONArray(myRecipeJSON);
+
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = arr.getJSONObject(i);
+
+                        String title = obj.getString(Recipe.TITLE);
+                        String recioe_details = obj.getString(Recipe.RECIPE_DETAILS);
+
+                        Recipe recipe = new Recipe(title, recioe_details);
+                        recipeList.add(recipe);
+                    }
+                } else {
+                    reason = "No recipes found.";
+                }
+
             } catch (JSONException e) {
                 reason = "Unable to parse data, Reason: " + e.getMessage();
             }
