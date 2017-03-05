@@ -27,12 +27,17 @@ import recipeking.uw.tacoma.edu.recipeking.R;
  */
 public class UserRecipeAddFragment extends Fragment {
 
+    /** String for representing the server ADD recipe url. */
     private final static String ADD_MYRECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450bteam7/addRecipe.php?";
 
+    /** EditText view representing the title of the recipe. */
     private EditText mRecipeTitleET;
+
+    /** EditText view representing the details of the recipe. */
     private EditText mRecipeDetailsET;
 
+    /** RecipeAddListener representing the listener for adding a recipe. */
     private RecipeAddListener mListener;
 
     /**
@@ -45,6 +50,10 @@ public class UserRecipeAddFragment extends Fragment {
         void addRecipe(String url);
     }
 
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
     public UserRecipeAddFragment() {
         // Required empty public constructor
     }
@@ -62,6 +71,10 @@ public class UserRecipeAddFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCreate method for this fragment.
+     * @param savedInstanceState - the savedInstanceState for this fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +83,16 @@ public class UserRecipeAddFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     * Inflates the view and the view elements for this Fragment.
+     *
+     * @param inflater - the inflater for this Fragment.
+     * @param container - the container for this Fragment.
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     *
+     * @return - a view object of this Fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,6 +138,11 @@ public class UserRecipeAddFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Builds the add url for adding a recipe to the server.
+     * @param v - the view element calling.
+     * @return - a String.
+     */
     private String buildRecipeAddUrl(View v) {
         StringBuilder sb = new StringBuilder(ADD_MYRECIPE_URL);
         try {
@@ -141,6 +169,10 @@ public class UserRecipeAddFragment extends Fragment {
     }
 
 
+    /**
+     * onAttach method for this fragment. Sets up the listener.
+     * @param context - the context.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -152,6 +184,9 @@ public class UserRecipeAddFragment extends Fragment {
         }
     }
 
+    /**
+     * onDetach method for this fragment.
+     */
     @Override
     public void onDetach() {
         super.onDetach();

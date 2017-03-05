@@ -37,19 +37,23 @@ import recipeking.uw.tacoma.edu.recipeking.utils.NetworkUtils;
  */
 public class UserRecipeFragment extends Fragment {
 
-
+    /** String field for column count. */
     private static final String ARG_COLUMN_COUNT = "column-count";
 
+    /** String representing the recipe list URL. */
     private static final String MY_RECIPE_LIST_URL =
             "http://cssgate.insttech.washington.edu/~_450bteam7/myrecipes_list.php?";
 
+    /** Column count integer */
     private int mColumnCount = 1;
 
+    /** Listener for activities interacting with this fragment. */
     private OnListFragmentInteractionListener mListener;
 
+    /** RecyclerView for this fragment. */
     private RecyclerView mRecyclerView;
 
-
+    /** List of recipes present in this fragment. */
     private List<Recipe> mRecipeList;
 
     /** Local recipe database storing info when network connection is unavailable. */
@@ -62,7 +66,11 @@ public class UserRecipeFragment extends Fragment {
     public UserRecipeFragment() {
     }
 
-
+    /**
+     * newInstance method for this fragment.
+     * @param columnCount - columnCount
+     * @return - UserRecipeFragment
+     */
     public static UserRecipeFragment newInstance(int columnCount) {
         UserRecipeFragment fragment = new UserRecipeFragment();
         Bundle args = new Bundle();
@@ -71,6 +79,10 @@ public class UserRecipeFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * onCreate method for this fragment.
+     * @param savedInstanceState - the savedInstanceState for this fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +92,16 @@ public class UserRecipeFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     * Inflates the view and the view elements for this Fragment.
+     *
+     * @param inflater - the inflater for this Fragment.
+     * @param container - the container for this Fragment.
+     * @param savedInstanceState - the savedInstanceState for this Fragment.
+     *
+     * @return - a view object of this Fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,6 +148,10 @@ public class UserRecipeFragment extends Fragment {
     }
 
 
+    /**
+     * onAttach method for this fragment.
+     * @param context - the context.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -137,6 +163,9 @@ public class UserRecipeFragment extends Fragment {
         }
     }
 
+    /**
+     * onDetach method for this fragment.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -153,6 +182,10 @@ public class UserRecipeFragment extends Fragment {
         void onListFragmentInteraction(Recipe item);
     }
 
+    /**
+     * Builds the URL for getting the list of recipes from the server.
+     * @return - a String.
+     */
     private String buildMyRecipeListUrl() {
         StringBuilder sb = new StringBuilder(MY_RECIPE_LIST_URL);
 
@@ -172,8 +205,16 @@ public class UserRecipeFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * AsyncTask for downloading recipes from the CSS gate server.
+     */
     private class DownloadRecipeTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground method for this task.
+         * @param urls - the server url
+         * @return - a String.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -202,7 +243,10 @@ public class UserRecipeFragment extends Fragment {
             return response;
         }
 
-
+        /**
+         * onPostExecute method for this fragment.
+         * @param result - the server result.
+         */
         @Override
         protected void onPostExecute(String result) {
             if (result.startsWith("Unable to")) {
@@ -221,7 +265,7 @@ public class UserRecipeFragment extends Fragment {
                 return;
             }
 
-            // Everything is good, show the list of courses.
+            // Everything is good, show the list of recipes.
             if (!mRecipeList.isEmpty()) {
 
                 //IMPLEMENT SQLITE DATABASE
@@ -242,7 +286,6 @@ public class UserRecipeFragment extends Fragment {
                 mRecyclerView.setAdapter(new MyUserRecipeRecyclerViewAdapter(mRecipeList, mListener));
             }
         }
-
 
     }
 

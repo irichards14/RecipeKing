@@ -30,7 +30,8 @@ UserRecipeAddFragment.RecipeAddListener,
 UserRecipeDetailFragment.RecipeDeleteListener {
 
     /**
-     * onCreate method for the current activity.
+     * onCreate method for the current activity. Prepares the UserRecipeFragment, and sets up
+     * the floating action button click handler.
      *
      * @param savedInstanceState - the saved arguments for this activity.
      */
@@ -71,6 +72,10 @@ UserRecipeDetailFragment.RecipeDeleteListener {
 
     }
 
+    /**
+     * Method for fragment interaction.
+     * @param item - the recipe item clicked.
+     */
     @Override
     public void onListFragmentInteraction(Recipe item) {
         UserRecipeDetailFragment userRecipeDetailFragment = UserRecipeDetailFragment.newInstance
@@ -82,6 +87,10 @@ UserRecipeDetailFragment.RecipeDeleteListener {
     }
 
 
+    /**
+     * Listener method for adding recipe.
+     * @param url - the add recipe url.
+     */
     @Override
     public void addRecipe(String url) {
         AddRecipeTask task = new AddRecipeTask();
@@ -91,6 +100,11 @@ UserRecipeDetailFragment.RecipeDeleteListener {
         getSupportFragmentManager().popBackStackImmediate();
     }
 
+
+    /**
+     * Listener method for deleting a recipe.
+     * @param url - the delete recipe url.
+     */
     @Override
     public void deleteRecipe(String url) {
         DeleteRecipeTask task = new DeleteRecipeTask();
@@ -101,8 +115,16 @@ UserRecipeDetailFragment.RecipeDeleteListener {
     }
 
 
+    /**
+     * AsyncTask class for adding a recipe to the CSS gate server.
+     */
     private class AddRecipeTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground method for this task.
+         * @param urls - the url
+         * @return - the GET result from the server.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -132,6 +154,10 @@ UserRecipeDetailFragment.RecipeDeleteListener {
         }
 
 
+        /**
+         * onPostExecute method for this task. Informs whether the add was successful or not.
+         * @param result - the GET result from the server.
+         */
         @Override
         protected void onPostExecute(String result) {
             try {
@@ -155,8 +181,16 @@ UserRecipeDetailFragment.RecipeDeleteListener {
     }
 
 
+    /**
+     * AsyncTask for deleting a recipe from the server.
+     */
     private class DeleteRecipeTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * doInBackground() method for this task.
+         * @param urls - the delete recipe URL.
+         * @return - a String.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -185,6 +219,10 @@ UserRecipeDetailFragment.RecipeDeleteListener {
         }
 
 
+        /**
+         * onPostExecute method for this task.
+         * @param result - the result from the server.
+         */
         @Override
         protected void onPostExecute(String result) {
             try {
