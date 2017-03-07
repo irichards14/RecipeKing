@@ -121,9 +121,15 @@ public class SignUpFragment extends Fragment {
         if (password.isEmpty() || !isPasswordValid(password)) {
             if(password.isEmpty()) {
                 mPassword.setError(getString(R.string.error_field_required));
+                Toast.makeText(getActivity(), "Password field is required",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 mPassword.setError(getString(R.string.error_invalid_password));
+                Toast.makeText(getActivity(),
+                        "This password is too short. Enter at least 6 characters",
+                        Toast.LENGTH_SHORT).show();
             }
+
 
             focusView = mPassword;
             cancel = true;
@@ -133,8 +139,13 @@ public class SignUpFragment extends Fragment {
         if (username.isEmpty() || isUsernameInvalid(username)) {
             if(username.isEmpty()) {
                 mUsername.setError(getString(R.string.error_field_required));
+                Toast.makeText(getActivity(), "Username field is required",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 mUsername.setError(getString(R.string.sign_up_username_invalid));
+                Toast.makeText(getActivity(),
+                        "Username cannot have space characters and must be less than 20 characters.",
+                        Toast.LENGTH_SHORT).show();
             }
 
             focusView = mUsername;

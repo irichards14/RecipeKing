@@ -103,12 +103,4 @@
 
     </ScrollView>
 
-    <!--<TextView-->
-        <!--android:id="@+id/sign_up_tv"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginTop="64dp"-->
-        <!--android:text="@string/registration"/>-->
-
 </LinearLayout>
