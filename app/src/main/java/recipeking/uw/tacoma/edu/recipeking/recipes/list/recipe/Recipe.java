@@ -229,9 +229,9 @@ public class Recipe implements Serializable {
                         JSONObject obj = arr.getJSONObject(i);
 
                         String title = obj.getString(Recipe.TITLE);
-                        String recioe_details = obj.getString(Recipe.RECIPE_DETAILS);
+                        String recipe_details = obj.getString(Recipe.RECIPE_DETAILS);
 
-                        Recipe recipe = new Recipe(title, recioe_details);
+                        Recipe recipe = new Recipe(title, recipe_details);
                         recipeList.add(recipe);
                     }
                 } else {

@@ -115,12 +115,18 @@ public class UserRecipeAddFragment extends Fragment {
                     invalidT = true;
                     mRecipeTitleET.setError("Try again");
                     mRecipeTitleET.requestFocus();
+                    Toast.makeText(getActivity(), "Title is invalid."
+                            , Toast.LENGTH_SHORT)
+                            .show();
                 }
 
                 if(details.isEmpty()) {
                     invalidD = true;
                     mRecipeDetailsET.setError("Details cannot be empty");
                     mRecipeDetailsET.requestFocus();
+                    Toast.makeText(getActivity(), "Details are invalid."
+                            , Toast.LENGTH_SHORT)
+                            .show();
                 }
 
                 if(!(invalidT || invalidD)) {
